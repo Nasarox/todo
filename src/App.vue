@@ -1,4 +1,21 @@
 <template>
+  <Layout>
+    <template v-slot:header>
+      Header Section
+    </template>
+    <template v-slot:aside>
+      Aside Section
+    </template>
+    <template v-slot:main>
+      Main Section
+    </template>
+    <template v-slot:footer>
+      Footer Section
+    </template>
+  </Layout>
+  <Button>
+      Button <strong>Component</strong>
+  </Button>
   <form action="" @submit.prevent="addTodo">
     <fieldset role="group">
       <input v-model="newTodo" type="text" placeholder="Task To Do"/>
@@ -12,10 +29,7 @@
           v-for="todo in sortedTodos"
           :key="todo.date"
           :class="{completed: todo.completed}">
-        <label>
-          <input type="checkbox" v-model="todo.completed"/>
-          {{ todo.title }}
-        </label>
+        <Checkbox :label="todo.title" @check="console.log('KACHOW')" @uncheck="console.log('FINITO')"/>
       </li>
     </ul>
     <label>
@@ -23,19 +37,28 @@
       Hide completed tasks
     </label>
     <p v-if="todoCounter > 0">Remaining : {{todoCounter}} task{{todoCounter > 1 ? 's' : ""}}</p>
+    <Checkbox label="test"></Checkbox>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
+import Checkbox from "./Checkbox.vue";
+import Button from "./Button.vue";
+import Layout from "@/Layout.vue";
 
 const newTodo = ref('')
 const hideEnded = ref(false)
 const todos = ref([
-    {
+  {
   title: 'Learn Vue.js',
   completed: true,
   date: Date.now()
+  },
+  {
+    title: 'Learn React.js',
+    completed: false,
+    date: Date.now()
   }
 ])
 
