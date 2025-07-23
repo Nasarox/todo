@@ -1,47 +1,55 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <form action="" @submit.prevent="addTodo">
+    <fieldset role="group">
+      <input v-model="newTodo" type="text" placeholder="Task To Do"/>
+      <button :disabled="newTodo.length === 0">Add</button>
+    </fieldset>
+  </form>
+  <div v-if="todos.length === 0">No waiting task</div>
+  <div v-else>
+    <ul>
+      <li
+          v-for="(todo, index) in todos"
+          :key="todo.date"
+          :class="{completed: todo.completed}">
+        <label>
+          <input type="checkbox" v-model="todo.completed"/>
+          {{ todo.title }}
+        </label>
+      </li>
+    </ul>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<script setup>
+import { ref } from 'vue';
+
+const newTodo = ref('')
+const todos = ref([
+    {
+  title: 'Learn Vue.js',
+  completed: true,
+  date: Date.now()
+  },
+  {
+    title: 'Learn JavaScript',
+    completed: false,
+    date: Date.now()
+  }])
+
+const addTodo = () => {
+  todos.value.push({
+    title: newTodo.value,
+    completed: false,
+    date: Date.now()
+  })
+  newTodo.value = ''
 }
+</script>
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+<style>
+.completed {
+  opacity: 50%;
+  text-decoration: line-through;
 }
 </style>

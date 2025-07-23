@@ -1,29 +1,72 @@
-# learn-vue
+<template>
+  <p>Compteur : {{ count }}</p>
+  <button @click="increment">Incrémenter</button>
+  <button @click="decrease">Diminuer</button>
+  <button @click="reset">Reset</button>
+  <hr>
+  <form action="" @submit.prevent="addMovie">
+    <input type="text" placeholder="Nouveau Film" v-model="newMovie">
+    <button>Ajouter</button>
+  </form>
+  <button @click="sortMovies">Réorganiser</button>
+  <ul>
+    <li v-for="movie in movies" :key="movie">
+      {{ movie }} <button @click="deleteMovie(movie)">Supprimer</button>
+    </li>
+  </ul>
+  <hr>
+  <ul>
+    <li>{{person.firstName}}</li>
+    <li>{{person.lastName}}</li>
+    <li>{{person.age}}</li>
+    <button @click.prevent)="randomAge">Changer Âge</button>
+  </ul>
+</template>
 
-This template should help get you started developing with Vue 3 in Vite.
+<script setup>
+import { ref } from 'vue';
 
-## Recommended IDE Setup
+const person = ref({
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 20,
+})
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+const randomAge = () => {
+  person.value.age = Math.floor(Math.random() * 100);
+};
 
-## Customize configuration
+const count = ref(0);
+const movies = ref ([
+  'Abraham Lincoln',
+  'Matrix',
+  'Zabrada',
+  'Brasilia',
+  'The Dark Knight',
+])
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+const deleteMovie = (movie) => {
+  movies.value = movies.value.filter(m => m !== movie);
+}
 
-## Project Setup
+const addMovie = () => {
+  movies.value.push(newMovie.value);
+  newMovie.value = '';
+}
 
-```sh
-npm install
-```
+const newMovie = ref('');
 
-### Compile and Hot-Reload for Development
+const sortMovies = () => {
+  movies.value.sort();
+};
 
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+const reset = () => {
+  count.value = 0;
+};
+const increment = (event) => {
+  count.value++;
+};
+const decrease = () => {
+  count.value--;
+};
+</script>
