@@ -9,7 +9,7 @@
   <div v-else>
     <ul>
       <li
-          v-for="(todo, index) in todos"
+          v-for="todo in sortedTodos()"
           :key="todo.date"
           :class="{completed: todo.completed}">
         <label>
@@ -30,12 +30,8 @@ const todos = ref([
   title: 'Learn Vue.js',
   completed: true,
   date: Date.now()
-  },
-  {
-    title: 'Learn JavaScript',
-    completed: false,
-    date: Date.now()
-  }])
+  }
+])
 
 const addTodo = () => {
   todos.value.push({
@@ -44,6 +40,10 @@ const addTodo = () => {
     date: Date.now()
   })
   newTodo.value = ''
+}
+
+const sortedTodos = () => {
+  return todos.value.toSorted((a, b) => a.completed > b.completed ? 1 : -1)
 }
 </script>
 
