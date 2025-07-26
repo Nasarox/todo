@@ -16,7 +16,7 @@
 </template>
 
 <style>
-.layout {
+/*.layout {
   display: grid;
   grid-template-columns: 200px 1fr;
 }
@@ -28,5 +28,5 @@
 .layout header,
 .layout footer {
   grid-column: 1 / -1;
-}
+}*/
 </style>

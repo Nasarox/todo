@@ -1,21 +1,6 @@
 <template>
-  <Layout>
-    <template v-slot:header>
-      Header Section
-    </template>
-    <template v-slot:aside>
-      Aside Section
-    </template>
-    <template v-slot:main>
-      Main Section
-    </template>
-    <template v-slot:footer>
-      Footer Section
-    </template>
-  </Layout>
-  <Button>
-      Button <strong>Component</strong>
-  </Button>
+  <button @click="showTimer = !showTimer">Show/Hide</button>
+  <Timer v-if="showTimer"></Timer>
   <form action="" @submit.prevent="addTodo">
     <fieldset role="group">
       <input v-model="newTodo" type="text" placeholder="Task To Do"/>
@@ -42,25 +27,22 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import {ref, computed, onMounted} from 'vue';
 import Checkbox from "./Checkbox.vue";
 import Button from "./Button.vue";
 import Layout from "@/Layout.vue";
+import Timer from "./Timer.vue";
 
 const newTodo = ref('')
 const hideEnded = ref(false)
-const todos = ref([
-  {
-  title: 'Learn Vue.js',
-  completed: true,
-  date: Date.now()
-  },
-  {
-    title: 'Learn React.js',
-    completed: false,
-    date: Date.now()
-  }
-])
+const todos = ref([])
+const showTimer = ref(true)
+
+onMounted(() => {
+  fetch("https://jsonplaceholder.typicode.com/todos")
+      .then(r => r.json())
+      .then(v => todos.value = v.map(todo => ({...todo, date: todo.id})))
+})
 
 const addTodo = () => {
   todos.value.push({
